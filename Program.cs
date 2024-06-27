@@ -62,6 +62,18 @@ app.MapGet("/paintColor", () =>
     });
 });
 
+app.MapGet("/interiors", () =>
+{
+    return interiors.Select(e => new InteriorDto
+    {
+        Id = e.Id,
+        Material = e.Material,
+        Price = e.Price
+
+    });
+});
+
+
 
 
 
