@@ -32,6 +32,48 @@ var wheels = new List<Wheels>
     new Wheels { Id = 4, Style = "18-inch Pair Spoke Black", Price = 695 }
 };
 
+var orders = new List<Orders>
+{
+     new Orders
+    {
+        Id = 1,
+        Timestamp = new DateTime(2024, 6, 1, 8, 30, 0),
+        WheelId = 1,
+        TechnologyId = 1,
+        PaintId = 3,
+        InteriorId = 4
+    },
+    new Orders
+    {
+        Id = 2,
+        Timestamp = new DateTime(2024, 6, 2, 9, 45, 0),
+        WheelId = 2,
+        TechnologyId = 2,
+        PaintId = 3,
+        InteriorId = 4
+    },
+    new Orders
+    {
+        Id = 3,
+        Timestamp = new DateTime(2024, 6, 3, 10, 15, 0),
+        WheelId = 3,
+        TechnologyId = 2,
+        PaintId = 3,
+        InteriorId = 3
+    },
+    new Orders
+    {
+        Id = 4,
+        Timestamp = new DateTime(2024, 6, 4, 11, 30, 0),
+        WheelId = 1,
+        TechnologyId = 2,
+        PaintId = 3,
+        InteriorId = 4
+    }
+};
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -94,6 +136,21 @@ app.MapGet("/wheels", () =>
 
     });
 });
+
+
+app.MapGet("/orders", () =>
+{
+    return orders.Select(o => new OrderDto
+    {
+        Id = o.Id,
+        WheelId = o.WheelId,
+        TechnologyId = o.TechnologyId,
+        PaintColorId = o.PaintId,
+        InteriorId = o.InteriorId,
+        Timestamp = o.Timestamp
+    });
+});
+
 
 
 

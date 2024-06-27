@@ -1,6 +1,6 @@
 namespace CarBuilderAPI.models;
 
-public class Order
+public class Orders
 {
     public int Id { get; set; }
     public DateTime Timestamp { get; set; }
