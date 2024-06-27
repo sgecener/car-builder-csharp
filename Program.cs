@@ -51,6 +51,19 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapGet("/paintColor", () =>
+{
+    return paintColors.Select(e => new PaintColorDto
+    {
+        Id = e.Id,
+        Color = e.Color,
+        Price = e.Price
+
+    });
+});
+
+
+
 
 
 app.Run();
