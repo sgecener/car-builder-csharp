@@ -84,6 +84,17 @@ app.MapGet("/techPackages", () =>
     });
 });
 
+app.MapGet("/wheels", () =>
+{
+    return wheels.Select(e => new WheelsDto
+    {
+        Id = e.Id,
+        Style = e.Style,
+        Price = e.Price
+
+    });
+});
+
 
 
 
