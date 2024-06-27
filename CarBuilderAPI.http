@@ -1,0 +1,6 @@
+@CarBuilderAPI_HostAddress = http://localhost:5190
+
+GET {{CarBuilderAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
