@@ -73,7 +73,16 @@ app.MapGet("/interiors", () =>
     });
 });
 
+app.MapGet("/techPackages", () =>
+{
+    return techPackages.Select(e => new TechnologyDto
+    {
+        Id = e.Id,
+        Package = e.Package,
+        Price = e.Price
 
+    });
+});
 
 
 
