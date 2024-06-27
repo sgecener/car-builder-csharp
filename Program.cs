@@ -32,9 +32,9 @@ var wheels = new List<Wheels>
     new Wheels { Id = 4, Style = "18-inch Pair Spoke Black", Price = 695 }
 };
 
-var orders = new List<Orders>
+var orders = new List<Order>
 {
-     new Orders
+     new Order
     {
         Id = 1,
         Timestamp = new DateTime(2024, 6, 1, 8, 30, 0),
@@ -43,7 +43,7 @@ var orders = new List<Orders>
         PaintId = 3,
         InteriorId = 4
     },
-    new Orders
+    new Order
     {
         Id = 2,
         Timestamp = new DateTime(2024, 6, 2, 9, 45, 0),
@@ -52,7 +52,7 @@ var orders = new List<Orders>
         PaintId = 3,
         InteriorId = 4
     },
-    new Orders
+    new Order
     {
         Id = 3,
         Timestamp = new DateTime(2024, 6, 3, 10, 15, 0),
@@ -61,7 +61,7 @@ var orders = new List<Orders>
         PaintId = 3,
         InteriorId = 3
     },
-    new Orders
+    new Order
     {
         Id = 4,
         Timestamp = new DateTime(2024, 6, 4, 11, 30, 0),
@@ -149,6 +149,33 @@ app.MapGet("/orders", () =>
         InteriorId = o.InteriorId,
         Timestamp = o.Timestamp
     });
+});
+
+app.MapPost("/orders", (Order order) =>
+{
+
+    // Get the customer data to check that the customerid for the service ticket is valid
+    // Order order = orders.FirstOrDefault(o => o.Id == order.CustomerId);
+
+    // if the client did not provide a valid customer id, this is a bad request
+    // if (customer == null)
+    // {
+    //     return Results.BadRequest();
+    // }
+
+    // creates a new id (SQL will do this for us like JSON Server did!)
+    order.Id = orders.Max(st => st.Id) + 1;
+    orders.Add(order);
+
+    // Created returns a 201 status code with a link in the headers to where the new resource can be accessed
+    return Results.Created($"/orders/{order.Id}", new OrderDto
+    {
+        Id = order.Id,
+        TechnologyId = order.TechnologyId,
+         
+       
+    });
+
 });
 
 
