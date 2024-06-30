@@ -153,29 +153,23 @@ app.MapGet("/orders", () =>
 
 app.MapPost("/orders", (Order order) =>
 {
+    // Set the timestamp to the current time
+    order.Timestamp = DateTime.Now;
 
-    // Get the customer data to check that the customerid for the service ticket is valid
-    // Order order = orders.FirstOrDefault(o => o.Id == order.CustomerId);
-
-    // if the client did not provide a valid customer id, this is a bad request
-    // if (customer == null)
-    // {
-    //     return Results.BadRequest();
-    // }
-
-    // creates a new id (SQL will do this for us like JSON Server did!)
-    order.Id = orders.Max(st => st.Id) + 1;
+    // Create a new id for the order
+    order.Id = orders.Max(o => o.Id) + 1;
     orders.Add(order);
 
-    // Created returns a 201 status code with a link in the headers to where the new resource can be accessed
+    // Return a 201 status code with a link to the new resource
     return Results.Created($"/orders/{order.Id}", new OrderDto
     {
         Id = order.Id,
+        WheelId = order.WheelId,
         TechnologyId = order.TechnologyId,
-         
-       
+        PaintColorId = order.PaintId,
+        InteriorId = order.InteriorId,
+        Timestamp = order.Timestamp
     });
-
 });
 
 
