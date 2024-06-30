@@ -5,7 +5,7 @@ var paintColors = new List<PaintColor>
             new PaintColor { Id = 1, Color = "Silver", Price = 0 },
             new PaintColor { Id = 2, Color = "Midnight Blue", Price = 295 },
             new PaintColor { Id = 3, Color = "Firebrick Red", Price = 395 },
-            new PaintColor { Id = 4, Color = "Spring Green", Price = 495 }
+            new PaintColor { Id = 4, Color = "Spring Forest Green", Price = 495 }
         };
 
 var interiors = new List<Interior>
