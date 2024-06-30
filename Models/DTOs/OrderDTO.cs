@@ -17,5 +17,14 @@ public class OrderDto
     public TechnologyDto? Technology { get; set; }
     public PaintColorDto? Paint { get; set; }
     public InteriorDto? Interior { get; set; }
-    public decimal TotalPrice { get; set; }
+    public decimal TotalPrice
+        {
+            get
+            {
+                return (Wheel?.Price ?? 0) + 
+                       (Technology?.Price ?? 0) + 
+                       (Paint?.Price ?? 0) + 
+                       (Interior?.Price ?? 0);
+            }
+        }
 }
