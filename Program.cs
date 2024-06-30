@@ -148,17 +148,66 @@ app.MapGet("/wheels", () =>
 });
 
 
+// app.MapGet("/orders", () =>
+// {
+
+    
+//     return orders.Select(o => new OrderDto
+//     {
+//         Id = o.Id,
+//         WheelId = o.WheelId,
+//         TechnologyId = o.TechnologyId,
+//         PaintColorId = o.PaintId,
+//         InteriorId = o.InteriorId,
+//         Timestamp = o.Timestamp,
+        
+//     });
+// });
+
 app.MapGet("/orders", () =>
 {
-    return orders.Select(o => new OrderDto
+    var orderDto = orders.Select(order => 
     {
-        Id = o.Id,
-        WheelId = o.WheelId,
-        TechnologyId = o.TechnologyId,
-        PaintColorId = o.PaintId,
-        InteriorId = o.InteriorId,
-        Timestamp = o.Timestamp
+        Wheels? wheel = wheels.FirstOrDefault(w => w.Id == order.WheelId);
+        Technology? technology = techPackages.FirstOrDefault(t => t.Id == order.TechnologyId);
+        PaintColor? paintColor = paintColors.FirstOrDefault(pc => pc.Id == order.PaintId);
+        Interior? interior = interiors.FirstOrDefault(i => i.Id == order.InteriorId);
+
+        return new OrderDto
+        {
+            Id = order.Id,
+            InteriorId = order.InteriorId,
+            PaintColorId = order.PaintId,
+            TechnologyId = order.TechnologyId,
+            WheelId = order.WheelId,
+            Wheel = wheel == null ? null : new WheelsDto
+            {
+                Id = wheel.Id,
+                Price = wheel.Price,
+                Style = wheel.Style
+            },
+            Interior = interior == null ? null : new InteriorDto
+            {
+                Id = interior.Id,
+                Price = interior.Price,
+                Material = interior.Material
+            },
+            Technology = technology == null ? null : new TechnologyDto
+            {
+                Id = technology.Id,
+                Price = technology.Price,
+                Package = technology.Package
+            },
+            Paint = paintColor == null ? null : new PaintColorDto
+            {
+                Id = paintColor.Id,
+                Price = paintColor.Price,
+                Color = paintColor.Color
+            },
+        };
     });
+
+    return Results.Ok(orderDto);
 });
 
 app.MapPost("/orders", (Order order) =>
