@@ -12,19 +12,7 @@ public class Order
     public Technology? Technology {get; set;}
     public PaintColor? Paint {get; set;}
     public Interior? Interior {get; set;}
-    public bool Fulfilled
-    {
-        get
-        {
-            if (Timestamp != null)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-    }
+    public bool Fulfilled {get; set;}
+
 
 }

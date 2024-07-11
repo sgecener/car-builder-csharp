@@ -27,18 +27,6 @@ public class OrderDto
                        (Interior?.Price ?? 0);
             }
         }
-    public bool Fulfilled
-    {
-        get
-        {
-            if (Timestamp != null)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-    }
+    public bool Fulfilled {get; set;}
+    
 }

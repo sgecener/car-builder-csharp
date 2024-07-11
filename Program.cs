@@ -41,7 +41,8 @@ var orders = new List<Order>
         WheelId = 1,
         TechnologyId = 1,
         PaintId = 3,
-        InteriorId = 4
+        InteriorId = 4,
+        Fulfilled = false
     },
     new Order
     {
@@ -50,7 +51,9 @@ var orders = new List<Order>
         WheelId = 2,
         TechnologyId = 2,
         PaintId = 3,
-        InteriorId = 4
+        InteriorId = 4,
+        Fulfilled = false
+
     },
     new Order
     {
@@ -59,7 +62,9 @@ var orders = new List<Order>
         WheelId = 3,
         TechnologyId = 2,
         PaintId = 3,
-        InteriorId = 3
+        InteriorId = 3,
+        Fulfilled = false
+
     },
     new Order
     {
@@ -68,7 +73,9 @@ var orders = new List<Order>
         WheelId = 1,
         TechnologyId = 2,
         PaintId = 3,
-        InteriorId = 4
+        InteriorId = 4,
+        Fulfilled = false
+
     }
 };
 
@@ -233,6 +240,22 @@ app.MapPost("/orders", (Order order) =>
         Timestamp = order.Timestamp
     });
 });
+
+app.MapPost("/orders/{id}/fulfill", (int id) => 
+{
+    Order order = orders.FirstOrDefault(order => order.Id == id);
+
+    if (order == null | order.Fulfilled == true)
+    {
+        return Results.BadRequest();
+    }
+
+    order.Fulfilled = true;
+
+    return Results.Ok();
+});
+
+app.Run();
 
 
 
