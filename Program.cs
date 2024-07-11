@@ -151,37 +151,27 @@ app.MapGet("/wheels", () =>
 });
 
 
-// app.MapGet("/orders", () =>
-// {
-
-    
-//     return orders.Select(o => new OrderDto
-//     {
-//         Id = o.Id,
-//         WheelId = o.WheelId,
-//         TechnologyId = o.TechnologyId,
-//         PaintColorId = o.PaintId,
-//         InteriorId = o.InteriorId,
-//         Timestamp = o.Timestamp,
-        
-//     });
-// });
-
-app.MapGet("/orders", () =>
+app.MapGet("/orders", (int? paintColorId) =>
 {
+
+    if (paintColorId != null & paintColors.FirstOrDefault(paintColor => paintColor.Id == paintColorId) == null)
+    {
+        return Results.BadRequest();
+    }
+
     List<OrderDto> ordersDTO = new List<OrderDto>();
 
-    List<Order> filteredOrders = orders.Where(o => !o.Fulfilled).ToList();
-
-    foreach (Order order in filteredOrders)
+    foreach (Order order in orders)
 
     {
-        Wheels? wheel = wheels.FirstOrDefault(w => w.Id == order.WheelId);
-        Technology? technology = techPackages.FirstOrDefault(t => t.Id == order.TechnologyId);
-        PaintColor? paintColor = paintColors.FirstOrDefault(pc => pc.Id == order.PaintId);
-        Interior? interior = interiors.FirstOrDefault(i => i.Id == order.InteriorId);
+        if (!order.Fulfilled) 
+        {
+            Wheels? wheel = wheels.FirstOrDefault(w => w.Id == order.WheelId);
+            Technology? technology = techPackages.FirstOrDefault(t => t.Id == order.TechnologyId);
+            PaintColor? paintColor = paintColors.FirstOrDefault(pc => pc.Id == order.PaintId);
+            Interior? interior = interiors.FirstOrDefault(i => i.Id == order.InteriorId);
 
-        OrderDto orderDTO = new OrderDto
+         ordersDTO.Add(new OrderDto()
         {
             Id = order.Id,
             InteriorId = order.InteriorId,
@@ -212,12 +202,21 @@ app.MapGet("/orders", () =>
                 Price = paintColor.Price,
                 Color = paintColor.Color
             },
-        };
+        });
 
-        ordersDTO.Add(orderDTO);
     }
 
-    return Results.Ok(ordersDTO);
+}
+
+List<OrderDto> filteredOrders = ordersDTO;
+
+if (paintColorId != null)
+    {
+        filteredOrders = filteredOrders.Where(order => order.PaintColorId == paintColorId).ToList();
+    }
+
+    return Results.Ok(filteredOrders);
+
 });
 
 app.MapPost("/orders", (Order order) =>
