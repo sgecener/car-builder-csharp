@@ -33,11 +33,11 @@ public class OrderDto
         {
             if (Timestamp != null)
             {
-                return true;
+                return false;
             }
             else
             {
-                return false;
+                return true;
             }
         }
     }

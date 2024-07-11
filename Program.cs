@@ -81,16 +81,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
-});
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -99,7 +90,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseCors("AllowAll");
+    app.UseCors(options =>
+                {
+                    options.AllowAnyOrigin();
+                    options.AllowAnyMethod();
+                    options.AllowAnyHeader();
+                });
 }
 app.UseHttpsRedirection();
 
@@ -166,14 +162,19 @@ app.MapGet("/wheels", () =>
 
 app.MapGet("/orders", () =>
 {
-    var orderDto = orders.Select(order => 
+    List<OrderDto> ordersDTO = new List<OrderDto>();
+
+    List<Order> filteredOrders = orders.Where(o => !o.Fulfilled).ToList();
+
+    foreach (Order order in filteredOrders)
+
     {
         Wheels? wheel = wheels.FirstOrDefault(w => w.Id == order.WheelId);
         Technology? technology = techPackages.FirstOrDefault(t => t.Id == order.TechnologyId);
         PaintColor? paintColor = paintColors.FirstOrDefault(pc => pc.Id == order.PaintId);
         Interior? interior = interiors.FirstOrDefault(i => i.Id == order.InteriorId);
 
-        return new OrderDto
+        OrderDto orderDTO = new OrderDto
         {
             Id = order.Id,
             InteriorId = order.InteriorId,
@@ -205,9 +206,11 @@ app.MapGet("/orders", () =>
                 Color = paintColor.Color
             },
         };
-    });
 
-    return Results.Ok(orderDto);
+        ordersDTO.Add(orderDTO);
+    }
+
+    return Results.Ok(ordersDTO);
 });
 
 app.MapPost("/orders", (Order order) =>
